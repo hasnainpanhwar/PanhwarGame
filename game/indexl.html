@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .game-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        p {
+            color: #333;
+            margin: 5px;
+        }
+
+        #secretWord {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #guessInput {
+            width: 30px;
+            font-size: 18px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        #guessButton {
+            font-size: 18px;
+            background-color: #28a745;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #guessButton:hover {
+            background-color: #11491d;
+        }
+
+        #remainingAttempts {
+            font-size: 18px;
+            color: #e90017;
+        }
+
+        #guessedLetters {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #6c757d;
+        }
+
+        #resultMessage {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #restartButton {
+            font-size: 16px;
+            background-color: #184576;
+            color: #c8e7ca;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: none;
+        }
+
+        #restartButton:hover {
+            background-color: #1605ff;
+        }
+    </style>
+    <script>
+        // ... (same JavaScript logic as before) ...
+    </script>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Welcome to the Word Guessing Game!</h1>
+        <p>Try to guess the secret word letter by letter.</p>
+
+        <p>Secret word: <span id="secretWord"></span></p>
+        <label for="guessInput">Guess a letter: </label>
+        <input type="text" id="guessInput" maxlength="1">
+        <button id="guessButton" onclick="makeGuess()">Submit Guess</button>
+
+        <p id="remainingAttempts">Remaining attempts: 10</p>
+        <p id="guessedLetters">Guessed letters: </p>
+        <p id="resultMessage"></p>
+        <button id="restartButton" onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <script>
+        updateDisplayWord();
+        updateGuessedLetters();
+    </script>
+</body>
+</html>
