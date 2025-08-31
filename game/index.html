@@ -88,6 +88,23 @@
         #restartButton:hover {
             background-color: #1605ff;
         }
+
+        #shareButton {
+            font-size: 16px;
+            background-color: #25D366;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: none;
+            margin-left: 10px;
+        }
+
+        #shareButton:hover {
+            background-color: #128C7E;
+        }
     </style>
 </head>
 <body>
@@ -104,6 +121,7 @@
         <p id="guessedLetters">Guessed letters: </p>
         <p id="resultMessage"></p>
         <button id="restartButton" onclick="restartGame()">Restart Game</button>
+        <button id="shareButton" onclick="shareOnWhatsApp()">Share on WhatsApp</button>
     </div>
 
     <script>
@@ -122,6 +140,7 @@
         const guessedLettersElement = document.getElementById("guessedLetters");
         const resultMessage = document.getElementById("resultMessage");
         const restartButton = document.getElementById("restartButton");
+        const shareButton = document.getElementById("shareButton");
 
         // Initialize the game by choosing a word and resetting state
         function initGame() {
@@ -133,6 +152,7 @@
             remainingAttemptsElement.textContent = `Remaining attempts: ${remainingAttempts}`;
             resultMessage.textContent = "";
             restartButton.style.display = "none";
+            shareButton.style.display = "none";
             updateDisplayWord();
             updateGuessedLetters();
         }
@@ -191,6 +211,7 @@
             guessInput.disabled = true;
             document.getElementById("guessButton").disabled = true;
             restartButton.style.display = "inline-block";
+            shareButton.style.display = "inline-block";
         }
 
         // Restart the game with a new word
@@ -207,6 +228,14 @@
                 makeGuess();
             }
         });
+
+        function shareOnWhatsApp() {
+            const message = resultMessage.textContent
+                ? `I just played the Word Guessing Game! ${resultMessage.textContent}`
+                : "I just played the Word Guessing Game!";
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, "_blank");
+        }
     </script>
 </body>
 </html>
