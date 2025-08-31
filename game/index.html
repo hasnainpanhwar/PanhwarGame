@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Word Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .game-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+        }
+
+        p {
+            color: #333;
+            margin: 5px;
+        }
+
+        #secretWord {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        #guessInput {
+            width: 30px;
+            font-size: 18px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        #guessButton {
+            font-size: 18px;
+            background-color: #28a745;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #guessButton:hover {
+            background-color: #11491d;
+        }
+
+        #remainingAttempts {
+            font-size: 18px;
+            color: #e90017;
+        }
+
+        #guessedLetters {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #6c757d;
+        }
+
+        #resultMessage {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        #restartButton {
+            font-size: 16px;
+            background-color: #184576;
+            color: #c8e7ca;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: none;
+        }
+
+        #restartButton:hover {
+            background-color: #1605ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Welcome to the Word Guessing Game!</h1>
+        <p>Try to guess the secret word letter by letter.</p>
+
+        <p>Secret word: <span id="secretWord"></span></p>
+        <label for="guessInput">Guess a letter: </label>
+        <input type="text" id="guessInput" maxlength="1">
+        <button id="guessButton" onclick="makeGuess()">Submit Guess</button>
+
+        <p id="remainingAttempts">Remaining attempts: 10</p>
+        <p id="guessedLetters">Guessed letters: </p>
+        <p id="resultMessage"></p>
+        <button id="restartButton" onclick="restartGame()">Restart Game</button>
+    </div>
+
+    <script>
+        // List of possible secret words
+        const words = ["python", "javascript", "coding", "computer", "hangman"];
+
+        // Game state variables
+        let secretWord = "";
+        let guessedLetters = [];
+        let remainingAttempts = 10;
+
+        // Element references
+        const secretWordElement = document.getElementById("secretWord");
+        const guessInput = document.getElementById("guessInput");
+        const remainingAttemptsElement = document.getElementById("remainingAttempts");
+        const guessedLettersElement = document.getElementById("guessedLetters");
+        const resultMessage = document.getElementById("resultMessage");
+        const restartButton = document.getElementById("restartButton");
+
+        // Initialize the game by choosing a word and resetting state
+        function initGame() {
+            secretWord = words[Math.floor(Math.random() * words.length)];
+            guessedLetters = [];
+            remainingAttempts = 10;
+            guessInput.disabled = false;
+            document.getElementById("guessButton").disabled = false;
+            remainingAttemptsElement.textContent = `Remaining attempts: ${remainingAttempts}`;
+            resultMessage.textContent = "";
+            restartButton.style.display = "none";
+            updateDisplayWord();
+            updateGuessedLetters();
+        }
+
+        // Display the word with underscores for unguessed letters
+        function updateDisplayWord() {
+            const displayWord = secretWord
+                .split("")
+                .map((letter) => (guessedLetters.includes(letter) ? letter : "_"))
+                .join(" ");
+            secretWordElement.textContent = displayWord;
+        }
+
+        // Show the list of letters the user has guessed so far
+        function updateGuessedLetters() {
+            guessedLettersElement.textContent = `Guessed letters: ${guessedLetters.join(", ")}`;
+        }
+
+        // Handle the player's guess
+        function makeGuess() {
+            const guess = guessInput.value.toLowerCase();
+            guessInput.value = "";
+
+            // Ignore invalid input or repeated guesses
+            if (!/^[a-z]$/.test(guess) || guessedLetters.includes(guess) || remainingAttempts <= 0) {
+                return;
+            }
+
+            guessedLetters.push(guess);
+
+            if (!secretWord.includes(guess)) {
+                remainingAttempts--;
+                remainingAttemptsElement.textContent = `Remaining attempts: ${remainingAttempts}`;
+            }
+
+            updateDisplayWord();
+            updateGuessedLetters();
+            checkGameStatus();
+        }
+
+        // Determine if the player has won or lost
+        function checkGameStatus() {
+            const hasWon = secretWord.split("").every((letter) => guessedLetters.includes(letter));
+
+            if (hasWon) {
+                resultMessage.textContent = "Congratulations! You guessed the word!";
+                endGame();
+            } else if (remainingAttempts <= 0) {
+                resultMessage.textContent = `Game over! The word was ${secretWord}.`;
+                endGame();
+            }
+        }
+
+        // Disable input and show the restart option
+        function endGame() {
+            guessInput.disabled = true;
+            document.getElementById("guessButton").disabled = true;
+            restartButton.style.display = "inline-block";
+        }
+
+        // Restart the game with a new word
+        function restartGame() {
+            initGame();
+        }
+
+        // Kick off the first game
+        initGame();
+
+        // Allow pressing Enter to submit a guess
+        guessInput.addEventListener("keyup", (e) => {
+            if (e.key === "Enter") {
+                makeGuess();
+            }
+        });
+    </script>
+</body>
+</html>
